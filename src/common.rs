@@ -7,7 +7,7 @@ pub fn read_file<T>(filename: &str, f: &dyn Fn (&str) -> T) -> Vec<T> {
 
     let mut res = Vec::new();
     for line in reader.lines() {
-        res.push(f(&line.unwrap()));
+        res.push(f(&line.unwrap().trim_end()));
     }
     res
 }

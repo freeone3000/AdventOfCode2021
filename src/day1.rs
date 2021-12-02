@@ -1,7 +1,5 @@
 use std::str::FromStr;
-
-#[path="common.rs"]
-mod common;
+use crate::common;
 
 fn parse_and_unwrap(s: &str) -> i32 {
     i32::from_str(s).unwrap()
