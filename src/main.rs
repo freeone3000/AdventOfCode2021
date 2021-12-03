@@ -4,6 +4,7 @@ use std::str::FromStr;
 mod common;
 mod day1;
 mod day2;
+mod day3;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -14,5 +15,7 @@ fn main() {
     } else if day == 2 {
         println!("Day 2 part 1: {}", day2::part1());
         println!("Day 2 part 1: {}", day2::part2());
+    } else if day == 3 {
+        println!("Day 3 part 1: {}", day3::part1());
     }
 }
