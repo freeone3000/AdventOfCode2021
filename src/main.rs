@@ -17,5 +17,6 @@ fn main() {
         println!("Day 2 part 1: {}", day2::part2());
     } else if day == 3 {
         println!("Day 3 part 1: {}", day3::part1());
+        println!("Day 3 part 2: {}", day3::part2());
     }
 }
