@@ -5,6 +5,7 @@ mod common;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -18,5 +19,7 @@ fn main() {
     } else if day == 3 {
         println!("Day 3 part 1: {}", day3::part1());
         println!("Day 3 part 2: {}", day3::part2());
+    } else if day == 4 {
+        println!("Day 4 part 1: {}", day4::part1());
     }
 }
