@@ -22,6 +22,7 @@ fn main() {
         println!("Day 3 part 2: {}", day3::part2());
     } else if day == 4 {
         println!("Day 4 part 1: {}", day4::part1());
+        println!("Day 4 part 2: {}", day4::part2());
     } else if day == 25 {
         println!("Day 25 part 1: {}", day25::part1());
     } else {

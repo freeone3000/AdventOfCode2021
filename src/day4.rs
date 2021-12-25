@@ -84,15 +84,7 @@ fn score(last_called: i32, board: &Board) -> i32 {
 
 fn run_game(numbers: Vec<i32>, mut boards: Vec<Board>) -> i32 {
     for number in numbers {
-        for board in boards.iter_mut() {
-            for i in 0..BOARD_SIZE {
-                for j in 0..BOARD_SIZE {
-                    if &board[i][j] == &number {
-                        board[i][j] = CALLED;
-                    }
-                }
-            }
-        }
+        call_number_on_boards(&number, &mut boards);
 
         print_boards(&boards); // DEBUG
 
@@ -104,6 +96,34 @@ fn run_game(numbers: Vec<i32>, mut boards: Vec<Board>) -> i32 {
     panic!("No winning board found!");
 }
 
+fn run_game_part2(numbers: Vec<i32>, mut boards: Vec<Board>) -> i32 {
+    for number in numbers {
+        call_number_on_boards(&number, &mut boards);
+
+        if boards.len() == 1 {
+            if is_winner(&boards[0]) {
+                return score(number, &boards[0]);
+            }
+        } else {
+            boards = boards.into_iter().filter(|board| !is_winner(board)).collect();
+        }
+    }
+
+    panic!("No winning board found!");
+}
+
+fn call_number_on_boards(number: &i32, boards: &mut Vec<Board>) {
+    for board in boards.iter_mut() {
+        for i in 0..BOARD_SIZE {
+            for j in 0..BOARD_SIZE {
+                if &board[i][j] == number {
+                    board[i][j] = CALLED;
+                }
+            }
+        }
+    }
+}
+
 fn f(filename: &str) -> i32 {
     let (numbers, boards) = parse_file(filename);
     run_game(numbers, boards)
@@ -113,4 +133,9 @@ pub fn part1() -> i32 {
     assert_eq!(f("day4_sample.txt"), 4512);
 
     f("day4.txt")
+}
+
+pub fn part2() -> i32 {
+    let (numbers, boards) = parse_file("day4.txt");
+    run_game_part2(numbers, boards)
 }
