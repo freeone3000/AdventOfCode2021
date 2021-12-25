@@ -1,0 +1,66 @@
+use std::fs::File;
+use std::path::Path;
+use std::io::{BufRead, BufReader};
+use array2d::Array2D;
+
+const EAST_FACING: char  = '>';
+const SOUTH_FACING: char = 'v';
+const EMPTY: char = '.';
+
+fn parse_input(filename: &Path) -> Array2D<char> {
+    let mut items: Vec<Vec<char>> = Vec::new();
+    let file = File::open(&filename).unwrap();
+    for line in BufReader::new(file).lines() {
+        let line_chars = line.unwrap().chars().collect::<Vec<_>>();
+        items.push(line_chars);
+    }
+
+    Array2D::from_rows(&*items)
+}
+
+fn next_step(prev_step: &Array2D<char>) -> Array2D<char> {
+    let max_row = prev_step.num_rows();
+    let max_col = prev_step.num_columns();
+    let mut result = Array2D::filled_with(EMPTY, max_row, max_col);
+
+    //east-facing herd moves first, then south-facing herd
+    for row in 0..max_row {
+        for col in 0..max_col {
+            if prev_step[(row, col)] == EAST_FACING {
+                if col + 1 < max_col && prev_step[(row, col+1)] == EMPTY { // move it!
+                    result[(row, col)] = EMPTY;
+                    result[(row, col+1)] = EAST_FACING;
+                } else { // can't move it
+                    result[(row, col)] = EAST_FACING;
+                }
+            }
+        }
+    }
+    result
+}
+
+fn print_step(step: &Array2D<char>) {
+    for row in 0..step.num_rows() {
+        for col in 0..step.num_columns() {
+            print!("{}", step[(row, col)]);
+        }
+        println!();
+    }
+}
+
+pub fn part1() -> i32 {
+    let mut cur_step = parse_input(Path::new("day25_east_facing.txt"));
+    let mut stepno = 0;
+    loop {
+        print_step(&cur_step);
+        println!();
+
+        let next_step = next_step(&cur_step);
+        if next_step == cur_step {
+            break;
+        }
+        cur_step = next_step;
+        stepno += 1;
+    }
+    stepno
+}
