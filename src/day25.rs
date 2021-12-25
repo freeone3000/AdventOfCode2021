@@ -66,14 +66,14 @@ fn next_step(prev_step: &Array2D<char>) -> Array2D<char> {
     south_result
 }
 
-fn print_step(step: &Array2D<char>) {
-    for row in 0..step.num_rows() {
-        for col in 0..step.num_columns() {
-            print!("{}", step[(row, col)]);
-        }
-        println!();
-    }
-}
+// fn print_step(step: &Array2D<char>) {
+//     for row in 0..step.num_rows() {
+//         for col in 0..step.num_columns() {
+//             print!("{}", step[(row, col)]);
+//         }
+//         println!();
+//     }
+// }
 
 pub fn part1() -> i32 {
     let mut cur_step = parse_input(Path::new("day25.txt"));
