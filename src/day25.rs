@@ -76,12 +76,12 @@ fn print_step(step: &Array2D<char>) {
 }
 
 pub fn part1() -> i32 {
-    let mut cur_step = parse_input(Path::new("day25_sample.txt"));
+    let mut cur_step = parse_input(Path::new("day25.txt"));
     let mut stepno = 0;
     loop {
         stepno += 1;
-        print_step(&cur_step);
-        println!();
+        // print_step(&cur_step);
+        // println!();
 
         let next_step = next_step(&cur_step);
         if next_step == cur_step {
