@@ -3,7 +3,8 @@ use std::io::{BufReader, BufRead};
 use std::str::FromStr;
 
 const BOARD_SIZE: usize = 5;
-type Board = [[i32; BOARD_SIZE]; BOARD_SIZE]; //uint32_t[5][5]
+const CALLED: i32 = -1;
+type Board = [[i32; BOARD_SIZE]; BOARD_SIZE]; //int32_t[5][5]
 
 fn print_boards(boards: &Vec<Board>) -> () {
     for i in 0..BOARD_SIZE {
@@ -63,13 +64,13 @@ fn parse_file(filename: &str) -> (Vec<i32>, Vec<Board>) {
 
 fn is_winner(board: &Board) -> bool {
     for i in 0..BOARD_SIZE {
-        let mut horiz_sum = 0;
-        let mut vert_sum = 0;
+        let mut horiz_win = true;
+        let mut vert_win = true;
         for j in 0..BOARD_SIZE {
-            horiz_sum += board[i][j];
-            vert_sum += board[j][i];
+            horiz_win = horiz_win && (board[i][j] == CALLED);
+            vert_win = vert_win && (board[j][i] == CALLED); // note the i,j flip
         }
-        if horiz_sum == 0 || vert_sum == 0 {
+        if horiz_win || vert_win {
             return true;
         }
     }
@@ -77,7 +78,7 @@ fn is_winner(board: &Board) -> bool {
 }
 
 fn score(last_called: i32, board: &Board) -> i32 {
-    let remaining_items = board.iter().fold(0, |state, line | state + line.iter().sum::<i32>());
+    let remaining_items = board.iter().fold(0, |state, line | state + line.iter().filter(|x| **x != CALLED).sum::<i32>());
     remaining_items * last_called
 }
 
@@ -87,7 +88,7 @@ fn run_game(numbers: Vec<i32>, mut boards: Vec<Board>) -> i32 {
             for i in 0..BOARD_SIZE {
                 for j in 0..BOARD_SIZE {
                     if &board[i][j] == &number {
-                        board[i][j] = 0;
+                        board[i][j] = CALLED;
                     }
                 }
             }
