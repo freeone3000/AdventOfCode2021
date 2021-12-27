@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-#define SAFE_AND_SLOW 1 // take out when we want to GO FAST
+#define SAFE_AND_SLOW 0 // take out when we want to GO FAST
 
 /*
  * data types
@@ -136,16 +136,43 @@ NUM run_program(const std::vector<Insn>& program, const char* input_stream) {
     for(auto it : program) {
         input_stream_idx = run_insn(state, it, input_stream, input_stream_idx);
     }
-    std::cout << "w: " << state[0] << " x: " << state[1] << " y: " << state[2] << " z: " << state[3] << std::endl;
+//    std::cout << "w: " << state[0] << " x: " << state[1] << " y: " << state[2] << " z: " << state[3] << std::endl;
     return state[3];
 }
 
-int main() {
-    const char* fn = "day24_sample.txt";
-    auto program = parse_program(fn);
-    NUM result = run_program(program, "9");
-
-    if(result == 0) {
-        std::cout << "Success!" << std::endl;
+bool decrement(char (&number)[15]) {
+    for(int idx = 13; idx >= 0; --idx) {
+        number[idx] -= 1;
+        if(number[idx] > '0') {
+            break;
+        }
+        number[idx] = '9';
     }
+    return number[0] != '0'; // TODO VERIFY
+}
+
+int main() {
+    const char* fn = "day24.txt";
+    auto program = parse_program(fn);
+
+    int count = 0;
+
+
+    char start_number[15] = "99999999999999";
+    start_number[14] = 0;
+    bool good;
+    do {
+        ++count;
+        if(count % 1000 == 0) {
+            std::cout << "Trying " << start_number << std::endl;
+        }
+
+        NUM result = run_program(program, start_number);
+        if(result == 0) {
+            std::cout << "Answer: " << start_number << std::endl;
+            break;
+        }
+        good = decrement(start_number);
+    } while(good);
+    return 0;
 }
